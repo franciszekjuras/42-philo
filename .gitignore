@@ -1,0 +1,6 @@
+philo
+tests/*/
+tests/*.sh
+*.txt
+*.log
+*.o
