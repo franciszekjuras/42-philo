@@ -1,33 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   resrc.h                                            :+:      :+:    :+:   */
+/*   app.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/01 22:54:26 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/02 22:15:06 by fjuras           ###   ########.fr       */
+/*   Created: 2022/10/01 12:51:58 by fjuras            #+#    #+#             */
+/*   Updated: 2022/10/02 20:40:20 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RESRC_H
-# define RESRC_H
+#ifndef APP_H
+# define APP_H
 # include <pthread.h>
+# include "argparse.h"
+# include "counter.h"
+# include "philo.h"
+# include "resrc.h"
+# include "utils.h"
 
-typedef struct s_resrc
+typedef struct s_app
 {
-	int				available;
-	pthread_mutex_t	mutex;
-}	t_resrc;
-
-void	resrc_init(t_resrc *resrc);
-
-void	resrc_free(t_resrc *resrc);
-
-int		resrc_acq(t_resrc *resrc);
-
-int		resrc_avl(t_resrc *resrc);
-
-void	resrc_rel(t_resrc *resrc);
+	pthread_t	*th_ids;
+	t_thdata	*th_data;
+	t_resrc		*forks;
+	t_thcommon	thcommon;
+	int			philo_num;
+}	t_app;
 
 #endif

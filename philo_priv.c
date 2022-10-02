@@ -1,33 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   resrc.h                                            :+:      :+:    :+:   */
+/*   philo_priv.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/01 22:54:26 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/02 22:15:06 by fjuras           ###   ########.fr       */
+/*   Created: 2022/10/01 12:51:58 by fjuras            #+#    #+#             */
+/*   Updated: 2022/10/02 22:13:14 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RESRC_H
-# define RESRC_H
-# include <pthread.h>
+#include <stdio.h>
+#include "philo.h"
 
-typedef struct s_resrc
+void	stamped_print(t_thdata *data, const char *str)
+{	
+	printf("%-5d %3d %s\n",
+		ms_elapsed_since(data->common->start_time), data->idx, str);
+}
+
+int	philo_die(t_thdata *data)
 {
-	int				available;
-	pthread_mutex_t	mutex;
-}	t_resrc;
-
-void	resrc_init(t_resrc *resrc);
-
-void	resrc_free(t_resrc *resrc);
-
-int		resrc_acq(t_resrc *resrc);
-
-int		resrc_avl(t_resrc *resrc);
-
-void	resrc_rel(t_resrc *resrc);
-
-#endif
+	if (resrc_acq(&data->common->dead_token))
+		stamped_print(data, "died");
+	return (0);
+}

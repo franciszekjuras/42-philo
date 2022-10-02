@@ -6,95 +6,74 @@
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 12:51:58 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/02 00:06:29 by fjuras           ###   ########.fr       */
+/*   Updated: 2022/10/02 22:12:57 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <sys/time.h>
 #include <unistd.h>
-#include <pthread.h>
 #include "philo.h"
+#include "philo_priv.h"
 #include "resrc.h"
-#include "counter.h"
-#include "atoi.h"
+#include "utils.h"
 
-t_args	parse_args(int argc, char **argv)
+int	philo_sleep(t_thdata *data, t_state *state)
 {
-	t_args	args;
-
-	args.philo_num = ft_atoi(argv[1]);
-	args.time_die = ft_atoi(argv[2]);
-	args.time_eat = ft_atoi(argv[3]);
-	args.time_sleep = ft_atoi(argv[4]);
-	if (argc >= 6)
-		args.eat_num = ft_atoi(argv[5]);
-	else
-		args.eat_num = -1;
-	return (args);
+	if (did_ms_elapse_since(data->common->args.time_die, state->last_meal))
+		return (philo_die(data));
+	if (did_ms_elapse_since(data->common->args.time_sleep, state->last_sleep))
+	{
+		state->func = philo_think;
+		stamped_print(data, "is thinking");
+	}
+	return (1);
 }
 
-void	*crazy_printer(void *arg)
+int	philo_think(t_thdata *data, t_state *state)
+{
+	if (did_ms_elapse_since(data->common->args.time_die, state->last_meal))
+		return (philo_die(data));
+	if (resrc_acq(data->lfork))
+	{
+		if (resrc_acq(data->rfork))
+		{
+			state->func = philo_eat;
+			stamped_print(data, "is eating");
+			gettimeofday(&state->last_meal, NULL);
+		}
+		else
+		{
+			resrc_rel(data->lfork);
+			swap((void **)&data->lfork, (void **)&data->rfork);
+		}
+	}
+	return (1);
+}
+
+int	philo_eat(t_thdata *data, t_state *state)
+{
+	if (did_ms_elapse_since(data->common->args.time_eat, state->last_meal))
+	{
+		resrc_rel(data->lfork);
+		resrc_rel(data->rfork);
+		state->func = philo_sleep;		
+		stamped_print(data, "is sleeping");
+		gettimeofday(&state->last_sleep, NULL);
+	}
+	return (1);
+}
+
+void	*philo_main(void *arg)
 {
 	t_thdata	*data;
+	t_state		state;
 
 	data = arg;
-	// usleep(1000);
-	counter_incr(data->counter);
-	// while (!resrc_acq(data->fork))
-	// 	usleep(10);
-	// printf("%d started eating\n", data->idx);
-	// usleep(100);
-	// printf("%d stoped eating\n", data->idx);
-	// resrc_rel(data->fork);
+	state.func = philo_think;
+	stamped_print(data, "is thinking");
+	gettimeofday(&state.last_meal, NULL);
+	while (state.func(data, &state) && resrc_avl(&data->common->dead_token))
+		usleep(1000);
 	return (NULL);
-}
-
-int	philo_init(t_philo *app, int argc, char **argv)
-{
-	if (argc < 5)
-	{
-		printf("%s: at least 4 arguments required\n", argv[0]);
-		return (-1);
-	}
-	app->args = parse_args(argc, argv);
-	app->thread_ids = malloc(sizeof(pthread_t) * app->args.philo_num);
-	app->thread_data = malloc(sizeof(t_thdata) * app->args.philo_num);
-	app->forks = malloc(sizeof(t_resrc) * app->args.philo_num);
-	return (0);
-}
-
-void	philo_free(t_philo *app)
-{
-	free(app->thread_ids);
-	free(app->thread_data);
-	free(app->forks);
-	return (0);
-}
-
-int	main(int argc, char **argv)
-{
-	t_philo	app;
-	int		i;
-
-	if (philo_init(&app, argc, argv) < 0)
-		return (-1);
-
-	// resrc_init(&fork);
-	// counter_init(&counter);
-	// i = 0;
-	// while (i < N)
-	// {
-	// 	thread_data[i].idx = i + 1;
-	// 	thread_data[i].fork = &fork;
-	// 	thread_data[i].counter = &counter;
-	// 	pthread_create(&thread_ids[i], NULL, crazy_printer, &thread_data[i]);
-	// 	++i;
-	// }
-	// i = 0;
-	// while (i < N)
-	// 	pthread_join(thread_ids[i++], NULL);
-	// printf("Counter: %d\n", counter_read(&counter));
-	// resrc_free(&fork);
-	// counter_free(&counter);
-	// return (0);
 }

@@ -1,33 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   resrc.h                                            :+:      :+:    :+:   */
+/*   philo_priv.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/01 22:54:26 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/02 22:15:06 by fjuras           ###   ########.fr       */
+/*   Created: 2022/10/01 12:51:58 by fjuras            #+#    #+#             */
+/*   Updated: 2022/10/02 22:06:56 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RESRC_H
-# define RESRC_H
-# include <pthread.h>
+#ifndef PHILO_PRIV_H
+# define PHILO_PRIV_H
 
-typedef struct s_resrc
-{
-	int				available;
-	pthread_mutex_t	mutex;
-}	t_resrc;
+#include "philo.h"
 
-void	resrc_init(t_resrc *resrc);
-
-void	resrc_free(t_resrc *resrc);
-
-int		resrc_acq(t_resrc *resrc);
-
-int		resrc_avl(t_resrc *resrc);
-
-void	resrc_rel(t_resrc *resrc);
+void	stamped_print(t_thdata *data, const char *str);
+int		philo_die(t_thdata *data);
 
 #endif

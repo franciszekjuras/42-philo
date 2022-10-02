@@ -6,7 +6,7 @@
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 22:54:21 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/01 22:58:23 by fjuras           ###   ########.fr       */
+/*   Updated: 2022/10/02 22:09:59 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,16 @@ int	resrc_acq(t_resrc *resrc)
 	resrc->available = 0;
 	pthread_mutex_unlock(&resrc->mutex);
 	return (acq_result);
+}
+
+int	resrc_avl(t_resrc *resrc)
+{
+	int	avl_result;
+
+	pthread_mutex_lock(&resrc->mutex);
+	avl_result = resrc->available;
+	pthread_mutex_unlock(&resrc->mutex);
+	return (avl_result);
 }
 
 void	resrc_rel(t_resrc *resrc)

@@ -1,7 +1,7 @@
 NAME = philo
 
 FILES = \
-	philo resrc counter atoi
+	app argparse atoi counter philo philo_priv resrc utils
 
 OFILES = $(FILES:%=%.o)
 CFLAGS = -Wall -Wextra -Werror
