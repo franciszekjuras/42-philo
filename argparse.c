@@ -6,7 +6,7 @@
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 12:51:58 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/01 23:57:06 by fjuras           ###   ########.fr       */
+/*   Updated: 2022/10/02 22:50:08 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ t_args	parse_args(int argc, char **argv)
 	args.time_eat = ft_atoi(argv[3]);
 	args.time_sleep = ft_atoi(argv[4]);
 	if (argc >= 6)
-		args.eat_num = ft_atoi(argv[5]);
+		args.eat_goal = ft_atoi(argv[5]);
 	else
-		args.eat_num = -1;
+		args.eat_goal = -1;
 	return (args);
 }

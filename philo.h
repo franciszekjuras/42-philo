@@ -6,7 +6,7 @@
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 12:51:58 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/02 22:05:00 by fjuras           ###   ########.fr       */
+/*   Updated: 2022/10/02 22:58:58 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 typedef struct s_thcommon
 {
 	t_resrc		dead_token;
-	t_counter	num_finished;
+	t_counter	left_count;
 	t_timeval	start_time;
 	t_args		args;
 }	t_thcommon;
@@ -43,8 +43,8 @@ struct s_state
 	t_state_func	func;
 	t_timeval		last_meal;
 	t_timeval		last_sleep;
+	int				times_ate;
 };
-
 
 int		philo_sleep(t_thdata *data, t_state *state);
 int		philo_think(t_thdata *data, t_state *state);

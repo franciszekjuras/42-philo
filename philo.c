@@ -6,7 +6,7 @@
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 12:51:58 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/02 22:12:57 by fjuras           ###   ########.fr       */
+/*   Updated: 2022/10/02 23:03:26 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ int	philo_sleep(t_thdata *data, t_state *state)
 		return (philo_die(data));
 	if (did_ms_elapse_since(data->common->args.time_sleep, state->last_sleep))
 	{
+		state->times_ate++;
+		if (data->common->args.eat_goal > 0
+			&& state->times_ate == data->common->args.eat_goal)
+			counter_decr(&data->common->left_count);
 		state->func = philo_think;
 		stamped_print(data, "is thinking");
 	}
@@ -57,7 +61,7 @@ int	philo_eat(t_thdata *data, t_state *state)
 	{
 		resrc_rel(data->lfork);
 		resrc_rel(data->rfork);
-		state->func = philo_sleep;		
+		state->func = philo_sleep;
 		stamped_print(data, "is sleeping");
 		gettimeofday(&state->last_sleep, NULL);
 	}
@@ -70,10 +74,12 @@ void	*philo_main(void *arg)
 	t_state		state;
 
 	data = arg;
+	state.times_ate = 0;
 	state.func = philo_think;
 	stamped_print(data, "is thinking");
 	gettimeofday(&state.last_meal, NULL);
-	while (state.func(data, &state) && resrc_avl(&data->common->dead_token))
+	while (state.func(data, &state) && resrc_avl(&data->common->dead_token)
+		&& counter_read(&data->common->left_count) != 0)
 		usleep(1000);
 	return (NULL);
 }

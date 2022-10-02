@@ -6,7 +6,7 @@
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 22:54:26 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/01 23:06:47 by fjuras           ###   ########.fr       */
+/*   Updated: 2022/10/02 22:57:37 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ typedef struct s_counter
 	pthread_mutex_t	mutex;
 }	t_counter;
 
-void	counter_init(t_counter *counter);
+void	counter_init(t_counter *counter, int start_value);
 
 void	counter_free(t_counter *counter);
 
 void	counter_incr(t_counter *counter);
+
+void	counter_decr(t_counter *counter);
 
 int		counter_read(t_counter *counter);
 
