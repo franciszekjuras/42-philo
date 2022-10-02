@@ -6,7 +6,7 @@
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 12:51:58 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/02 23:03:26 by fjuras           ###   ########.fr       */
+/*   Updated: 2022/10/03 00:15:17 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,34 @@ int	philo_sleep(t_thdata *data, t_state *state)
 	return (1);
 }
 
+int	philo_starve(t_thdata *data, t_state *state)
+{
+	if (did_ms_elapse_since(data->common->args.time_die, state->last_meal))
+		return (philo_die(data));
+	if (state->lfork_picked)
+	{
+		if (resrc_acq(data->rfork))
+		{
+			state->lfork_picked = 0;
+			state->func = philo_eat;
+			stamped_print(data, "is eating");
+			gettimeofday(&state->last_meal, NULL);
+		}
+	}
+	else if (resrc_acq(data->lfork))
+	{
+		stamped_print(data, "has taken a fork");
+		state->lfork_picked = 1;
+	}
+	else if (resrc_acq(data->rfork))
+	{		
+		stamped_print(data, "has taken a fork");
+		swap((void **)&data->lfork, (void **)&data->rfork);
+		state->lfork_picked = 1;
+	}
+	return (1);
+}
+
 int	philo_think(t_thdata *data, t_state *state)
 {
 	if (did_ms_elapse_since(data->common->args.time_die, state->last_meal))
@@ -45,12 +73,18 @@ int	philo_think(t_thdata *data, t_state *state)
 			state->func = philo_eat;
 			stamped_print(data, "is eating");
 			gettimeofday(&state->last_meal, NULL);
+			return (1);
 		}
 		else
 		{
 			resrc_rel(data->lfork);
 			swap((void **)&data->lfork, (void **)&data->rfork);
 		}
+	}
+	if ((data->common->args.time_die - ms_elapsed_since(state->last_meal))
+		<= data->common->args.time_eat + 5)
+	{
+		state->func = philo_starve;
 	}
 	return (1);
 }
@@ -75,6 +109,7 @@ void	*philo_main(void *arg)
 
 	data = arg;
 	state.times_ate = 0;
+	state.lfork_picked = 0;
 	state.func = philo_think;
 	stamped_print(data, "is thinking");
 	gettimeofday(&state.last_meal, NULL);

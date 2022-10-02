@@ -6,7 +6,7 @@
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 12:51:58 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/02 22:58:58 by fjuras           ###   ########.fr       */
+/*   Updated: 2022/10/02 23:44:00 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,12 @@ struct s_state
 	t_state_func	func;
 	t_timeval		last_meal;
 	t_timeval		last_sleep;
+	int				lfork_picked;
 	int				times_ate;
 };
 
 int		philo_sleep(t_thdata *data, t_state *state);
+int		philo_starve(t_thdata *data, t_state *state);
 int		philo_think(t_thdata *data, t_state *state);
 int		philo_eat(t_thdata *data, t_state *state);
 void	*philo_main(void *arg);
