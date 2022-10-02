@@ -6,7 +6,7 @@
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 12:51:58 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/02 22:59:36 by fjuras           ###   ########.fr       */
+/*   Updated: 2022/10/03 00:43:05 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ int	app_init(t_app *app, int argc, char **argv)
 {
 	int	i;
 
-	if (argc < 5)
+	if (!parse_args(&app->thcommon.args, argc, argv))
 	{
-		printf("%s: at least 4 arguments required\n", argv[0]);
+		printf("Usage: %s <time to die> <time to eat> "
+			"<time to sleep> [times must eat]\n", argv[0]);
 		return (-1);
 	}
-	app->thcommon.args = parse_args(argc, argv);
 	app->philo_num = app->thcommon.args.philo_num;
 	app->th_ids = malloc(sizeof(pthread_t) * app->philo_num);
 	app->th_data = malloc(sizeof(t_thdata) * app->philo_num);
