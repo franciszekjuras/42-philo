@@ -6,7 +6,7 @@
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 12:51:58 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/03 00:43:05 by fjuras           ###   ########.fr       */
+/*   Updated: 2022/10/03 00:55:35 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	app_init(t_app *app, int argc, char **argv)
 	app->forks = malloc(sizeof(t_resrc) * app->philo_num);
 	resrc_init(&app->thcommon.dead_token);
 	counter_init(&app->thcommon.left_count, app->philo_num);
+	pthread_mutex_init(&app->thcommon.print_mutex, NULL);
 	i = 0;
 	while (i < app->philo_num)
 	{
@@ -82,6 +83,7 @@ void	app_free(t_app *app)
 
 	resrc_free(&app->thcommon.dead_token);
 	counter_free(&app->thcommon.left_count);
+	pthread_mutex_destroy(&app->thcommon.print_mutex);
 	free(app->th_ids);
 	free(app->th_data);
 	i = 0;
