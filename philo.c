@@ -6,7 +6,7 @@
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 12:51:58 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/03 00:15:17 by fjuras           ###   ########.fr       */
+/*   Updated: 2022/10/03 13:12:19 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	philo_think(t_thdata *data, t_state *state)
 		}
 	}
 	if ((data->common->args.time_die - ms_elapsed_since(state->last_meal))
-		<= data->common->args.time_eat + 5)
+		<= data->common->args.time_eat + 10)
 	{
 		state->func = philo_starve;
 	}
