@@ -6,7 +6,7 @@
 /*   By: fjuras <fjuras@student.42wolfsburg.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 12:51:58 by fjuras            #+#    #+#             */
-/*   Updated: 2022/10/03 00:55:35 by fjuras           ###   ########.fr       */
+/*   Updated: 2022/10/03 12:58:58 by fjuras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int	app_init(t_app *app, int argc, char **argv)
 
 	if (!parse_args(&app->thcommon.args, argc, argv))
 	{
-		printf("Usage: %s <time to die> <time to eat> "
-			"<time to sleep> [times must eat]\n", argv[0]);
+		printf("Usage: %s <mumber of philosophers> <time to die> <time to eat>\n"
+			"       <time to sleep> [times must eat]\n", argv[0]);
 		return (-1);
 	}
 	app->philo_num = app->thcommon.args.philo_num;
